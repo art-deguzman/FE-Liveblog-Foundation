@@ -1,57 +1,21 @@
-# base
+# FE Liveblog Foundation
 
 ## Project setup
 
 ```
-# yarn
-yarn
+After pulling, run 
+$ npm install 
 
-# npm
-npm install
-
-# pnpm
-pnpm install
-```
-
-### Compiles and hot-reloads for development
+once updated, run
+$ npm run dev
 
 ```
-# yarn
-yarn dev
+Components List:
 
-# npm
-npm run dev
+RtLiveblog - Liveblog entry (landing) page
 
-# pnpm
-pnpm dev
-```
+Other components are set to load as based on the task Create VueJS Foundation
 
-### Compiles and minifies for production
+https://realtimes-network.monday.com/boards/1194977434/views/3431686/pulses/1233448792
 
-```
-# yarn
-yarn build
 
-# npm
-npm run build
-
-# pnpm
-pnpm build
-```
-
-### Lints and fixes files
-
-```
-# yarn
-yarn lint
-
-# npm
-npm run lint
-
-# pnpm
-pnpm lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
