@@ -10,22 +10,21 @@
             </button>
         </div>
     </div>
+    <!-- <template v-for="item in list" :key="item.id">
+        <iterate-post :data="item" />
+    </template> -->
 
-    <div class="show-list-post clear-both mt-4 mb-4">
-        <!-- <div class="blog-thumnbnail-wrapper flex" v-for="item in list" :key="item.id"> -->
-        <!-- <div class="flex" v-for="item in list" :key="item.id">
-            <div>
-                <h5>Test</h5>
-                <div>{{ item }}</div>
-            </div>
-        </div> -->
-    </div>
+    <iterate-post />
 </template>
 
 <script>
     import moment from 'moment'    
     import axios from "axios"
+    import IteratePost from './IteratePost.vue'
+    // import ShareIcons from './ShareIcons.vue'
     export default {
+        name: 'LiveBlog',
+        components : { IteratePost },
         data(){
             return { 
                 list: []
@@ -39,10 +38,9 @@
                 return (moment().format('h:mm a'))
             }
         },
-        name: 'LiveBlog',
         async mounted() {
             let result = await axios.get("https://run.mocky.io/v3/673eb8d3-fdf4-4a1e-abac-a86362b5eb1f")
-            console.warn(result.data)
+            // console.warn(result.data)
             this.list = result.data
         }
     }

@@ -12,7 +12,7 @@
     components : { HeaderContent, RtLiveblog },
     mounted() { 
 
-      console.log(this.$options.components['RtLiveblog'].name)
+      // console.log(this.$options.components['RtLiveblog'].name)
     }
   }
 </script>

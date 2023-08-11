@@ -5,15 +5,21 @@
           <div id="live-blog">
             <fe-liveblog />
           </div>
-          <div id="blog-thumbnail">
+          <div id="blog-thumbnail-view">
             <fe-liveblog-thumbnail />
-          </div>
-  
+          </div>  
           <hr class="clear-both mt-10 mb-10">
   
           <div id="list-post">
             <fe-list-post />
           </div>
+
+          <hr class="clear-both mt-10 mb-10">
+
+          <div class="post-detail">
+            <fe-post-detail />
+          </div>
+
         </div>
         <div class="w-1/3">
           <fe-sidebar-content />
@@ -29,9 +35,10 @@
     import FeLiveblogThumbnail from './FeLiveblogThumbnail.vue'
     import FeListPost from './FeListPost.vue'
     import FeSidebarContent from './FeSidebarContent.vue'
+    import FePostDetail from './FePostDetail.vue'
     export default {
       name: 'RtLiveblog',
-      components : { FeLiveblog, FeLiveblogThumbnail, FeListPost, FeSidebarContent }
+      components : { FeLiveblog, FeLiveblogThumbnail, FeListPost, FeSidebarContent, FePostDetail }
     }
   </script>
   

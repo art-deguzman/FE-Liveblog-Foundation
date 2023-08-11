@@ -13,6 +13,12 @@
 
     <div class="show-live-blog-item clear-both mt-4 mb-4">
         <div class="blog-thumnbnail-wrapper flex" v-for="item in list" :key="item.id">
+            <input type="hidden"
+                class="invisible hidden"
+                :data-id="item.id"
+                :data-created-date="getTimeDate(item.created_at)"
+                :data-updated-date="getTimeDate(item.updated_at)"                
+            />
             <div class="timestamp-detail flex-none w-30 w-1/6 p-4">
                 <p><strong>{{ getHumanDate(item.published_at) }}</strong></p>
                 <p><small>{{ getHours(item.published_at) }}</small></p>
@@ -27,11 +33,12 @@
                     <img :src="item.media.url" :alt="item.media.name" class="w-full">
                     <figcaption>{{ item.title }}</figcaption>
                 </figure>
-                <p><small>{{ item.media.name }}</small></p>
-                <span class="pinned-post"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                <div class="summary-content" v-for="d in item.summary" :key="d.id">
+                    <p><small>{{ d.title }}</small></p>
+                    <span class="pinned-post" :data-pinned="d.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                </div>
                 <ShareIcons />
-            </div>
-            
+            </div>            
         </div>        
     </div>
 </template>
@@ -40,10 +47,11 @@
     import moment from 'moment'    
     import axios from "axios"
     import ShareIcons from './ShareIcons.vue'
+
     export default {
         data(){
             return { 
-                list: []
+                list: [],
             }
         },
         methods: {
@@ -52,72 +60,17 @@
             },
             getHours: function (date) {
                 return (moment().format('h:mm a'))
-            }
+            },
+            getTimeDate: function(date){
+                return (moment().format('YYYY-MM-DD hh:mm:ss a'))
+            }            
         },
         name: 'LiveBlog',
-        components: {ShareIcons},
+        components: { ShareIcons },
         async mounted() {
             let result = await axios.get("https://run.mocky.io/v3/bd847ea3-090e-4c3a-b0b0-90bdfecd62e1")
-            console.warn(result.data)
+            // console.warn(result.data)
             this.list = result.data
         }
     }
 </script>
-
-<style lang="scss">
-.timestamp-detail {
-    p {
-        color: var(--rt-text-blue-dark-color);
-    }
-}
-.blog-thumbnail {
-    background-color: var(--rt-light-blue-color);
-    border-top: 5px solid var(--rt-text-blue-dark-color);
-    position: relative;
-    z-index:0;
-    position: relative;
-    h4 { 
-        color: var(--rt-text-blue-color);
-        font-weight: 700;
-        font-size: 1.2rem;
-        margin-top: 16px;
-        margin-bottom: 12px;
-    }
-    p {
-        color: var(--rt-text-blue-color);
-    }
-    figure {
-        margin-top: 12px;
-        margin-bottom: 12px;
-        position: relative;
-        z-index: 0;
-        min-height: 100px;
-        max-height: 270px;
-        overflow: hidden;
-        img {
-            display: block;
-            width: 100%;
-            height: auto;
-            transform: translate(0%, -24%);
-            background-size: cover;
-            object-fit: cover;
-        }
-    }
-    .pinned-post {
-        position: absolute;
-        top: 0;
-        right: 0;
-        a {
-            display: block;
-            background-color: var(--rt-text-blue-dark-color);
-            color: white;
-            text-transform: uppercase;
-            padding: 2px 10px 6px;
-            font-size: 0.8rem;
-        }
-        
-    }
-    
-}
-
-</style>
