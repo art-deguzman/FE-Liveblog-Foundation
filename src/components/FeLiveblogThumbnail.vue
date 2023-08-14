@@ -36,11 +36,84 @@
                 <div class="summary-content" v-for="d in item.summary" :key="d.id">
                     <p><small>{{ d.title }}</small></p>
                     <span class="pinned-post" :data-pinned="d.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                    <span class="other-label">Breaking</span>
                 </div>
                 <ShareIcons />
             </div>            
         </div>        
     </div>
+
+    <div class="show-live-blog-item label-styling clear-both mt-4 mb-4">
+        <div class="blog-thumnbnail-wrapper flex" v-for="item in list" :key="item.id">
+            <input type="hidden"
+                class="invisible hidden"
+                :data-id="item.id"
+                :data-created-date="getTimeDate(item.created_at)"
+                :data-updated-date="getTimeDate(item.updated_at)"                
+            />
+            <div class="timestamp-detail flex-none w-30 w-1/6 p-4">
+                <p><strong>{{ getHumanDate(item.published_at) }}</strong></p>
+                <p><small>{{ getHours(item.published_at) }}</small></p>
+                <button class="mt-4 border-r8 p-4 bg-slate-100" type="button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 14 3-3m-3 3 3 3m-3-3h16v-3m2-7-3 3m3-3-3-3m3 3H3v3"/>
+              </svg></button>
+            </div>
+            <div class="blog-thumbnail rounded-md w-5/6 p-4">
+                <h4>{{ item.media.name }}</h4>
+                <p>{{  item.title }}</p>
+                <figure>
+                    <img :src="item.media.url" :alt="item.media.name" class="w-full">
+                    <figcaption>{{ item.title }}</figcaption>
+                </figure>
+                <div class="summary-content" v-for="d in item.summary" :key="d.id">
+                    <p><small>{{ d.title }}</small></p>
+                    <span class="pinned-post" :data-pinned="d.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                    <span class="other-label">Breaking</span>
+                </div>
+                <ShareIcons />
+                <div class="content-blocks clear-both" v-for="cb in item.contentBlocks" :key="cb.id">
+                  <div class="content-blocks-list"
+                    :data-id="cb.id"
+                    :data-type="cb.type"
+                    :data-created-date="cb.created_at"
+                    :data-updated-date="cb.updated_at"
+                  >
+                    <!-- <div class="content-type-wrapper bg-orange-200">{{ cb.type }} </div>
+                    <div class="content-block-wrapper bg-sky-200">{{ cb.content }}</div> -->
+                    <!-- <editor-content :editor="editor" /> -->
+
+                    <div class="content-block-image"
+                     :data-id="cb.id"
+                     :data-public-id="cb.public_id"
+                    >
+                      <p class="block-heading">{{ cb.type }}</p>
+                      <a href="#"><img :src="cb.content.url" :alt="cb.content.name" class="w-full"/></a>                        
+                      <h5>{{ cb.content.name }}</h5>
+                    </div>
+
+                    <div class="content-block-poll"
+                      :data-id="cb.id"
+                    >
+                      <p class="block-heading">{{ cb.type }}</p>
+                      <h5>{{ cb.content.title }}</h5>
+                      <ul>
+                        <li v-for="answer in cb.content.answers">
+                          <input type="radio" :id="answer.id" name="content-poll">
+                          <label :for="answer.id">{{ answer.answer }}</label>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="content-block-editor">
+                      <p class="block-heading">{{ cb.type }}</p>
+                      
+                    </div>
+
+                  </div>
+                </div>  
+            </div>            
+        </div>        
+    </div>    
 </template>
 
 <script>

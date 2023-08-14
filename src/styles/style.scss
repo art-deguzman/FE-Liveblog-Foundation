@@ -18,6 +18,9 @@
     --rt-light-silver: #f7f7f8; // Light Silver
     --rt-light-gray: #ccd0d6; // Light Gray
     --rt-light-gray2: #cdd1d7; // Light Gray 2    
+    --rt-light-red-color: #fef4f5; // Light Red
+    --rt-red-color: #a30c27; // Red 
+
 }
 
 .text-green { color: var(--rt-text-green-color)};
@@ -132,17 +135,44 @@
     }
     .pinned-post {
         position: absolute;
-        top: 0;
+        top: -5px;
         right: 0;
         a {
             display: block;
             background-color: var(--rt-text-blue-dark-color);
             color: white;
             text-transform: uppercase;
-            padding: 2px 10px 6px;
+            padding: 7px 10px 6px;
             font-size: 0.8rem;
+            border-top-right-radius: 6px;
         }
         
     }
-    
+    .other-label {
+        display: none;
+        visibility: hidden;
+    }
+      
+}
+
+// Label Styling
+.label-styling:is(.label-styling) {
+    .blog-thumbnail {
+        background-color: var(--rt-light-red-color);
+        border-top-color: var(--rt-red-color);
+        .other-label {
+            color: white;
+            background-color: var(--rt-red-color);
+            padding: 7px 10px 6px;
+            text-transform: uppercase;
+            border-top-left-radius: 6px;
+            position: absolute;
+            top: -5px;
+            left: 0;
+            font-weight: bold;
+            font-size: 0.8rem;
+            visibility: visible;
+            display: block;
+        }
+    }
 }

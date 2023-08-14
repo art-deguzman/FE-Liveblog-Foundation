@@ -18,7 +18,8 @@
                     <figcaption>{{ item.title }}</figcaption>
                 </figure>
                 <p><small>{{ item.media.name }}</small></p>
-                <span class="pinned-post" :data-pinned="item.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                  <span class="pinned-post" :data-pinned="item.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                  <span class="other-label">Breaking</span>
                 <share-icons /> 
                 <div class="content-blocks clear-both" v-for="cb in item.contentBlocks" :key="cb.id">
                   <div class="content-blocks-list"
@@ -27,8 +28,37 @@
                     :data-created-date="cb.created_at"
                     :data-updated-date="cb.updated_at"
                   >
-                    {{ cb.content }}
-                    <editor-content :editor="editor" />
+                    <!-- <div class="content-type-wrapper bg-orange-200">{{ cb.type }} </div>
+                    <div class="content-block-wrapper bg-sky-200">{{ cb.content }}</div> -->
+                    <!-- <editor-content :editor="editor" /> -->
+
+                    <div class="content-block-image"
+                     :data-id="cb.id"
+                     :data-public-id="cb.public_id"
+                    >
+                      <p class="block-heading">{{ cb.type }}</p>
+                      <a href="#"><img :src="cb.content.url" :alt="cb.content.name" class="w-full"/></a>                        
+                      <h5>{{ cb.content.name }}</h5>
+                    </div>
+
+                    <div class="content-block-poll"
+                      :data-id="cb.id"
+                    >
+                      <p class="block-heading">{{ cb.type }}</p>
+                      <h5>{{ cb.content.title }}</h5>
+                      <ul>
+                        <li v-for="answer in cb.content.answers">
+                          <input type="radio" :id="answer.id" name="content-poll">
+                          <label :for="answer.id">{{ answer.answer }}</label>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="content-block-editor">
+                      <p class="block-heading">{{ cb.type }}</p>
+                      
+                    </div>
+
                   </div>
                 </div>               
             </div>
@@ -55,26 +85,17 @@
 import axios from 'axios'
 import moment from 'moment'
 import ShareIcons from './ShareIcons.vue'
-import { Editor, EditorContent } from '@tiptap/vue-3'
+
+
 import StarterKit from '@tiptap/starter-kit'
+import { Editor, EditorContent } from '@tiptap/vue-3'
 export default {
   name: 'IteratePost',
   el: 'body',
-  components: { ShareIcons, EditorContent },
-  // setup() {
-  //   const editor = useEditor({
-  //     content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
-  //     extensions: [
-  //       StarterKit,
-  //     ],
-  //   })
-
-  //   return { editor }
-  // },
+  components: { ShareIcons, EditorContent, StarterKit },
   data(){
       return { 
-          list: [],
-          editor: null
+          list: []
       }
   },
   props: {
@@ -82,16 +103,6 @@ export default {
     modelValue: {
       type: String,
       default: ''
-    }
-  },
-  emits: [ 'update:modelValue'],
-  watch: {
-    modelValue(value) {
-      const isSame = this.editor.getHTML() == value
-      if (isSame) {
-        return
-      }
-      this.editor.commands.setContent(value, false)
     }
   },
   methods: {
@@ -106,20 +117,6 @@ export default {
       let result = await axios.get("https://run.mocky.io/v3/673eb8d3-fdf4-4a1e-abac-a86362b5eb1f")
       console.warn(result.data)
       this.list = result.data
-
-      this.editor = new Editor({
-      extensions: [
-        StarterKit,
-      ],
-      content: this.modelValue,
-      onUpdate: () => {
-        // HTML
-        this.$emit('update:modelValue', this.editor.getHTML())
-
-        // JSON
-        // this.$emit('update:modelValue', this.editor.getJSON())
-      }
-    })
   },
   beforeUnmount(){
     this.editor.destroy()
@@ -219,6 +216,21 @@ export default {
     a.active {
       color: white;
       background-color: var(--rt-text-blue-dark-color);
+    }
+  }
+  .content-blocks-list {
+    & > div {
+      padding-bottom : 20px;        
+     }
+    h5 {
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+    }
+    input[type=radio] {
+      margin-right: 0.4rem;
+    }
+    .block-heading {
+      text-transform: uppercase;
     }
   }
 </style>
