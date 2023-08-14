@@ -36,7 +36,6 @@
                 <div class="summary-content" v-for="d in item.summary" :key="d.id">
                     <p><small>{{ d.title }}</small></p>
                     <span class="pinned-post" :data-pinned="d.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
-                    <span class="other-label">Breaking</span>
                 </div>
                 <ShareIcons />
             </div>            
@@ -71,46 +70,6 @@
                     <span class="other-label">Breaking</span>
                 </div>
                 <ShareIcons />
-                <div class="content-blocks clear-both" v-for="cb in item.contentBlocks" :key="cb.id">
-                  <div class="content-blocks-list"
-                    :data-id="cb.id"
-                    :data-type="cb.type"
-                    :data-created-date="cb.created_at"
-                    :data-updated-date="cb.updated_at"
-                  >
-                    <!-- <div class="content-type-wrapper bg-orange-200">{{ cb.type }} </div>
-                    <div class="content-block-wrapper bg-sky-200">{{ cb.content }}</div> -->
-                    <!-- <editor-content :editor="editor" /> -->
-
-                    <div class="content-block-image"
-                     :data-id="cb.id"
-                     :data-public-id="cb.public_id"
-                    >
-                      <p class="block-heading">{{ cb.type }}</p>
-                      <a href="#"><img :src="cb.content.url" :alt="cb.content.name" class="w-full"/></a>                        
-                      <h5>{{ cb.content.name }}</h5>
-                    </div>
-
-                    <div class="content-block-poll"
-                      :data-id="cb.id"
-                    >
-                      <p class="block-heading">{{ cb.type }}</p>
-                      <h5>{{ cb.content.title }}</h5>
-                      <ul>
-                        <li v-for="answer in cb.content.answers">
-                          <input type="radio" :id="answer.id" name="content-poll">
-                          <label :for="answer.id">{{ answer.answer }}</label>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div class="content-block-editor">
-                      <p class="block-heading">{{ cb.type }}</p>
-                      
-                    </div>
-
-                  </div>
-                </div>  
             </div>            
         </div>        
     </div>    

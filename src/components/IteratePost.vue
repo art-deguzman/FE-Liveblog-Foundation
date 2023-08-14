@@ -21,6 +21,7 @@
                   <span class="pinned-post" :data-pinned="item.pinned"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
                   <span class="other-label">Breaking</span>
                 <share-icons /> 
+
                 <div class="content-blocks clear-both" v-for="cb in item.contentBlocks" :key="cb.id">
                   <div class="content-blocks-list"
                     :data-id="cb.id"
@@ -28,23 +29,14 @@
                     :data-created-date="cb.created_at"
                     :data-updated-date="cb.updated_at"
                   >
-                    <!-- <div class="content-type-wrapper bg-orange-200">{{ cb.type }} </div>
-                    <div class="content-block-wrapper bg-sky-200">{{ cb.content }}</div> -->
-                    <!-- <editor-content :editor="editor" /> -->
-
-                    <div class="content-block-image"
-                     :data-id="cb.id"
-                     :data-public-id="cb.public_id"
-                    >
-                      <p class="block-heading">{{ cb.type }}</p>
-                      <a href="#"><img :src="cb.content.url" :alt="cb.content.name" class="w-full"/></a>                        
-                      <h5>{{ cb.content.name }}</h5>
+                  <div class="clear-both p-4">
+                    <h5>{{ cb.content.name }}</h5>
+                    
+                    <div class="content-detail mb-4" v-if="cb.type == 'image'">
+                      <a :href="cb.content.url"><img :src="cb.content.url" :alt="cb.content.name"></a>
                     </div>
-
-                    <div class="content-block-poll"
-                      :data-id="cb.id"
-                    >
-                      <p class="block-heading">{{ cb.type }}</p>
+                    
+                    <div class="content-details mb-4" v-if="cb.type == 'poll'">
                       <h5>{{ cb.content.title }}</h5>
                       <ul>
                         <li v-for="answer in cb.content.answers">
@@ -54,10 +46,44 @@
                       </ul>
                     </div>
 
-                    <div class="content-block-editor">
-                      <p class="block-heading">{{ cb.type }}</p>
-                      
+                    <div class="content-details mb-4" v-if="cb.type == 'editor'">
+                      {{ cb.content }}
+                      <div v-if="editor">
+                        <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+                          bold
+                        </button>
+                        <button @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+                          italic
+                        </button>
+                        <button @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+                          strike
+                        </button>
+                        <button @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }">
+                          code
+                        </button>
+                      </div>
+                      <editor-content :editor="editor" />
+
+
+
+
                     </div>
+
+                    <div class="content-details mb-4" v-if="cb.type == 'embed'">
+                      {{ cb.content }}
+                    </div>
+
+                    <div class="content-details mb-4" v-if="cb.type == 'linked-embed'">
+                      <ul>
+                        <li class="block">Website: </li>
+                        <li class="block">Picture: </li>
+                        <li class="block">Title: </li>
+                        <li class="block">Description: </li>
+                        <li class="block">Link: </li>
+                      </ul>
+                    </div>
+
+                  </div>
 
                   </div>
                 </div>               
@@ -92,18 +118,15 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 export default {
   name: 'IteratePost',
   el: 'body',
-  components: { ShareIcons, EditorContent, StarterKit },
+  components: { ShareIcons, EditorContent },
   data(){
       return { 
-          list: []
+          list: [],
+          editor: null 
       }
   },
   props: {
-    data: Object,
-    modelValue: {
-      type: String,
-      default: ''
-    }
+    data: Object
   },
   methods: {
     getHumanDate: function (date) {
@@ -115,8 +138,34 @@ export default {
   },  
   async mounted() {
       let result = await axios.get("https://run.mocky.io/v3/673eb8d3-fdf4-4a1e-abac-a86362b5eb1f")
-      console.warn(result.data)
+      // console.warn(result.data)
       this.list = result.data
+
+
+      let wysiwigData = this.list.data
+
+      // console.log(wysiwigData)
+
+      let w = []
+      
+      for (let key in wysiwigData){
+        let wd = wysiwigData[key].contentBlocks
+        for(let k in wd){
+          return wd[k].content   
+        }
+      }
+
+      console.log(wd[k].content)
+
+      this.editor = new Editor({
+        extensions: [
+          StarterKit
+        ],
+        // content: w
+        content: `
+          Editor Box here...
+        `
+      })
   },
   beforeUnmount(){
     this.editor.destroy()
