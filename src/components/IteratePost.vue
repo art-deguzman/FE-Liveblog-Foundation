@@ -32,11 +32,11 @@
                   <div class="clear-both p-4">
                     <h5>{{ cb.content.name }}</h5>
                     
-                    <div class="content-detail mb-4" v-if="cb.type == 'image'">
+                    <div class="content-detail mb-4 image" v-if="cb.type == 'image'">
                       <a :href="cb.content.url"><img :src="cb.content.url" :alt="cb.content.name"></a>
                     </div>
                     
-                    <div class="content-details mb-4" v-if="cb.type == 'poll'">
+                    <div class="content-details mb-4 poll" v-if="cb.type == 'poll'">
                       <h5>{{ cb.content.title }}</h5>
                       <ul>
                         <li v-for="answer in cb.content.answers">
@@ -46,34 +46,15 @@
                       </ul>
                     </div>
 
-                    <div class="content-details mb-4" v-if="cb.type == 'editor'">
-                      {{ cb.content }}
-                      <div v-if="editor">
-                        <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
-                          bold
-                        </button>
-                        <button @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
-                          italic
-                        </button>
-                        <button @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
-                          strike
-                        </button>
-                        <button @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }">
-                          code
-                        </button>
-                      </div>
-                      <editor-content :editor="editor" />
-
-
-
-
+                    <div class="content-details mb-4 editor" v-if="cb.type == 'editor'">
+                      <div class="editor-container" v-html="cb.content"></div>
                     </div>
 
-                    <div class="content-details mb-4" v-if="cb.type == 'embed'">
+                    <div class="content-details mb-4 embed" v-if="cb.type == 'embed'">
                       {{ cb.content }}
                     </div>
 
-                    <div class="content-details mb-4" v-if="cb.type == 'linked-embed'">
+                    <div class="content-details mb-4 linked-embed" v-if="cb.type == 'linked-embed'">
                       <ul>
                         <li class="block">Website: </li>
                         <li class="block">Picture: </li>
@@ -112,13 +93,10 @@ import axios from 'axios'
 import moment from 'moment'
 import ShareIcons from './ShareIcons.vue'
 
-
-import StarterKit from '@tiptap/starter-kit'
-import { Editor, EditorContent } from '@tiptap/vue-3'
 export default {
   name: 'IteratePost',
   el: 'body',
-  components: { ShareIcons, EditorContent },
+  components: { ShareIcons},
   data(){
       return { 
           list: [],
@@ -140,35 +118,6 @@ export default {
       let result = await axios.get("https://run.mocky.io/v3/673eb8d3-fdf4-4a1e-abac-a86362b5eb1f")
       // console.warn(result.data)
       this.list = result.data
-
-
-      let wysiwigData = this.list.data
-
-      // console.log(wysiwigData)
-
-      let w = []
-      
-      for (let key in wysiwigData){
-        let wd = wysiwigData[key].contentBlocks
-        for(let k in wd){
-          return wd[k].content   
-        }
-      }
-
-      console.log(wd[k].content)
-
-      this.editor = new Editor({
-        extensions: [
-          StarterKit
-        ],
-        // content: w
-        content: `
-          Editor Box here...
-        `
-      })
-  },
-  beforeUnmount(){
-    this.editor.destroy()
   }
   /*
   mounted: function(){
@@ -280,6 +229,46 @@ export default {
     }
     .block-heading {
       text-transform: uppercase;
+    }
+  }
+  // for mock api test show only
+  .content-details {
+    &.editor{
+      .editor-container {
+        .at {
+          b{
+            display: block;
+          }
+        }
+        .consequatur {
+          i {
+            display: block;
+          }
+          ul {
+            list-style-type:circle;
+            list-style-position: inside;
+          }
+        }
+        form {
+          padding: 10px 0;
+          input {
+            border: 1px solid var(--rt-light-gray);
+            display: block;
+          }
+        }
+        table {
+          border: 1px solid var(--rt-light-gray);
+          border-collapse: separate;
+          margin: 20px 0px;
+        }
+        a {
+          text-decoration: underline;
+          color: var(--rt-text-blue2-color);
+          &:hover {
+            color: rgba(0,123,255,0.6);
+          }
+        }
+      }
     }
   }
 </style>

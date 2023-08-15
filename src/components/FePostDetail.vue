@@ -17,6 +17,7 @@
                 </figure>
                 <p><small>{{ item.media.name }}</small></p>
                 <span class="pinned-post"><a href="#"><i class="fa fa-thumb-tack"></i> Pinned</a></span>
+                <span class="other-label">Breaking</span>
                 <ShareIcons />
             </div>            
         </div>        
